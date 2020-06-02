@@ -20,7 +20,7 @@ use ::rtype::*;
 
 #[derive(Debug)]
 pub struct RError {
-    kind: REKind,
+    pub kind: REKind,
 }
 
 macro_rules! gen_fmt {

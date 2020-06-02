@@ -234,7 +234,7 @@ macro_rules! rlist {
       $(
 			// skip a warning message 
 			x += 1;
-      		res.uset(x-1, try!($tts.intor()));
+      		res.uset(x-1, $tts.intor()?);
       		
       )*      
 	}
@@ -254,7 +254,7 @@ macro_rules! rlist {
       $(
 			// skip a warning message 
 			x += 1;
-      		res.uset(x-1, try!($tts.intor()));
+      		res.uset(x-1, $tts.intor()?);
       		name.uset(x-1, stringify!($id));
       )*
 	}
