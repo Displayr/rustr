@@ -1,7 +1,9 @@
 use rdll::*;
 use environment::*;
 
-use std::ffi::*;
+use std::ffi::c_char;
+use std::ffi::CString;
+use std::ffi::CStr;
 use std::os::raw::*;
 use error::*;
 use std::env;
@@ -64,7 +66,7 @@ impl REngine {
 
                 unsafe {
 
-                    let xs: String = try!(CStr::from_ptr(get_R_HOME()).to_owned().into_string());
+                    let xs: String = CStr::from_ptr(get_R_HOME()).to_owned().into_string()?;
 
                     env::set_var("R_HOME", &xs)
 
