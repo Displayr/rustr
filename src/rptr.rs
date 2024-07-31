@@ -20,7 +20,7 @@ use util::*;
 pub type RPtr<Obj> = RPtrM<Obj, Preserve>;
 
 pub trait RDrop {
-    fn rdrop(SEXP);
+    fn rdrop(_: SEXP);
 }
 
 #[derive(Debug)]

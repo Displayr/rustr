@@ -9,10 +9,10 @@ use protect::stackp::*;
 use rtype::*;
 use util::rprint as rp;
 
-pub fn pairlist(xs: &[&Args]) -> RResult<SEXP> {
+pub fn pairlist(xs: &[&dyn Args]) -> RResult<SEXP> {
     let mut res: Shield = Shield::new(unsafe { R_NilValue });
     let mut it = xs.iter().rev();
-    let head: &Args = match it.next() {
+    let head: &dyn Args = match it.next() {
         None => return rraise("need at list one input args"),
         Some(x) => *x,
     };
@@ -42,8 +42,8 @@ pub fn pairlist(xs: &[&Args]) -> RResult<SEXP> {
 
 }
 
-pub fn language(xs: &[&Args]) -> RResult<SEXP> {
-    let call = Shield::new(try!(pairlist(xs)));
+pub fn language(xs: &[&dyn Args]) -> RResult<SEXP> {
+    let call = Shield::new(pairlist(xs)?);
     unsafe {
         SET_TAG(call.s(), R_NilValue);
         SET_TYPEOF(call.s(), LANGSXP as ::std::os::raw::c_int);
@@ -51,10 +51,10 @@ pub fn language(xs: &[&Args]) -> RResult<SEXP> {
     }
 }
 
-pub fn pairlist1(hd: &Args, xs: &[&Args]) -> RResult<SEXP> {
+pub fn pairlist1(hd: &dyn Args, xs: &[&dyn Args]) -> RResult<SEXP> {
     let mut res: Shield = Shield::new(unsafe { Rf_cons(hd.s(), R_NilValue) });
     let mut it = xs.iter().rev();
-    let head: &Args = match it.next() {
+    let head: &dyn Args = match it.next() {
         None => return Ok(unsafe { res.s() }),
         Some(x) => *x,
     };
@@ -89,8 +89,8 @@ pub fn pairlist1(hd: &Args, xs: &[&Args]) -> RResult<SEXP> {
 
 }
 
-pub fn language1(hd: &Args, xs: &[&Args]) -> RResult<SEXP> {
-    let call = Shield::new(unsafe { Rf_lcons(hd.s(), try!(pairlist(xs))) });
+pub fn language1(hd: &dyn Args, xs: &[&dyn Args]) -> RResult<SEXP> {
+    let call = Shield::new(unsafe { Rf_lcons(hd.s(), pairlist(xs)?) });
     unsafe {
         SET_TAG(call.s(), R_NilValue);
         SET_TYPEOF(call.s(), LANGSXP as ::std::os::raw::c_int);

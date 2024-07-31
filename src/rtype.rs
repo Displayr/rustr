@@ -7,7 +7,7 @@ use rdll::{TYPEOF, SEXP, SET_TYPEOF};
 
 pub type Rtype = ::std::os::raw::c_uint;
 
-#[allow(unused_doc_comment)]
+#[allow(unused_doc_comments)]
 #[derive(Copy, PartialEq, Eq, Clone, Debug)]
 pub enum RTypeEnum {
     NIL,
@@ -41,7 +41,7 @@ pub enum RTypeEnum {
     FUN,
 }
 
-#[allow(unused_doc_comment)]
+#[allow(unused_doc_comments)]
 #[inline]
 pub fn match_rtype(x: Rtype) -> RTypeEnum {
     match x {

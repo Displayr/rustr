@@ -20,8 +20,8 @@ gen_traits_sexp!(RFmlM);
 impl<T: SEXPbucket> FromStr for RFmlM<T> {
     type Err = RError;
     fn from_str(string: &str) -> RResult<Self> {
-        let char = try!(CString::new(string));
-        let dd = try!(convert_using_rfunction(unsafe { Rf_mkString(char.as_ptr()) }, "as.formula"));
+        let char = CString::new(string)?;
+        let dd = convert_using_rfunction(unsafe { Rf_mkString(char.as_ptr()) }, "as.formula")?;
         Ok(RFmlM { data: T::new(dd) })
     }
 }
@@ -35,7 +35,7 @@ impl<T: SEXPbucket> RFmlM<T> {
                     if Rf_inherits(x, c_str("formula").as_ptr()) == Rboolean::TRUE {
                         x
                     } else {
-                        let zz = try!(convert_using_rfunction(x, "as.formula"));
+                        let zz = convert_using_rfunction(x, "as.formula")?;
                         zz
                     }
                 }
@@ -46,7 +46,7 @@ impl<T: SEXPbucket> RFmlM<T> {
                         if Rf_inherits(y, c_str("formula").as_ptr()) == Rboolean::TRUE {
                             y
                         } else {
-                            let rr = try!(convert_using_rfunction(y, "as.formula"));
+                            let rr = convert_using_rfunction(y, "as.formula")?;
                             rr
                         }
                     } else {
@@ -54,7 +54,7 @@ impl<T: SEXPbucket> RFmlM<T> {
                     }
                 }
                 _ => {
-                    let dd = try!(convert_using_rfunction(x, "as.formula"));
+                    let dd = convert_using_rfunction(x, "as.formula")?;
                     dd
                 }
             };

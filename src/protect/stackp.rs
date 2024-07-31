@@ -47,7 +47,7 @@ impl Drop for Shield {
 
 impl ToSEXP for Shield {
     unsafe fn s(&self) -> SEXP {
-        (self.t)
+        self.t
     }
 }
 

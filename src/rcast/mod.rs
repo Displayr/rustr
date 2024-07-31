@@ -15,7 +15,7 @@ use ::protect::stackp::*;
 #[inline]
 pub fn convert_using_rfunction(x: SEXP, fun: &str) -> SEXPResult {
     unsafe {
-        let fun_r = try!(::std::ffi::CString::new(fun));
+        let fun_r = ::std::ffi::CString::new(fun)?;
         let fun_sym = Rf_install(fun_r.as_ptr());
 
         let res: Armor;

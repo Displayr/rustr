@@ -32,7 +32,7 @@ impl<T: SEXPbucket> From<RFunM<T>> for RLangM<T> {
 }
 
 impl<T: SEXPbucket> RLangM<T> {
-    pub fn new(x: &[&Args]) -> RResult<Self> {
+    pub fn new(x: &[&dyn Args]) -> RResult<Self> {
         Ok(RLangM { data: T::new(try!(pairlist(x))) })
     }
     pub fn set_symbol(&mut self, symbol: &Symbol) {

@@ -21,13 +21,11 @@ pub mod dimname;
 #[cfg(feature = "extra")]
 pub mod rlist;
 
-pub use self::intor::*;
 pub use self::attr::*;
 pub use self::slot::*;
 pub use self::name::*;
 pub use self::rfield::*;
 pub use self::dim::*;
-pub use self::dimname::*;
 #[cfg(feature = "extra")]
 pub use self::rlist::*;
 

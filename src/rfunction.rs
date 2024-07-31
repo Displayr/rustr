@@ -73,12 +73,12 @@ impl<T: SEXPbucket> RFunM<T> {
     pub fn body(&self) -> SEXP {
         unsafe { BODY(self.s()) }
     }
-    pub fn eval<D: RNew>(&self, args: &[&Args]) -> RResult<D> {
+    pub fn eval<D: RNew>(&self, args: &[&dyn Args]) -> RResult<D> {
         let call = Shield::new(try!(language1(self, args)));
         D::rnew(try!(rustr_eval(unsafe { call.s() }, unsafe { R_GlobalEnv })))
     }
     pub fn eval_env<EE: SEXPbucket, D: RNew>(&self,
-                                             args: &[&Args],
+                                             args: &[&dyn Args],
                                              envir: EnvirM<EE>)
                                              -> RResult<D> {
         let call = Shield::new(try!(language1(self, args)));

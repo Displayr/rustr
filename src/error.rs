@@ -32,8 +32,8 @@ macro_rules! gen_fmt {
                     UnknownError(ref info) => write!(fmt,"UnknownError: {}",info),
                     UnreachableError(ref info) => write!(fmt,"UnreachableError: {}",info),
                     ForceStopError(ref info) => write!(fmt,"ForceStopError: {}",info),
-                    Other(ref c) =>  write!(fmt, "rustr error: {}",c.description()),
-                    $($x(ref c) => write!(fmt, "{}: {}", stringify!($x), c.description()))
+                    Other(ref c) =>  write!(fmt, "rustr error: {}",c.to_string()),
+                    $($x(ref c) => write!(fmt, "{}: {}", stringify!($x), c.to_string()))
                         ,*
 
                 }
@@ -69,14 +69,14 @@ macro_rules! gen_fmt {
 
         }
 
-    fn cause(&self) -> Option<&Error> {
+    fn cause(&self) -> Option<&dyn Error> {
         match *self.kind() {
             UnknownError(..) => None,
             UnreachableError(..) => None,
             ForceStopError(..) => None,
-            Other(ref c) => c.cause(),
+            Other(ref c) => c.source(),
             $($x(ref c))
-                    |* => c.cause(),
+                    |* => c.source(),
         }
 
     }
@@ -84,8 +84,8 @@ macro_rules! gen_fmt {
 
     #[derive(Debug)]
     pub enum REKind{
-        $($x(Box<Error+Send+Sync>)),*
-        ,UnknownError(String), UnreachableError(String), ForceStopError(String),Other(Box<Error+Send+Sync>)
+        $($x(Box<dyn Error+Send+Sync>)),*
+        ,UnknownError(String), UnreachableError(String), ForceStopError(String),Other(Box<dyn Error+Send+Sync>)
 
     }
     )
@@ -153,7 +153,7 @@ impl RError {
     }
     #[inline]
     pub fn other<E>(x: E) -> RError
-        where E: Into<Box<Error + Send + Sync>>
+        where E: Into<Box<dyn Error + Send + Sync>>
     {
         RError { kind: REKind::Other(x.into()) }
     }
@@ -165,7 +165,7 @@ impl RError {
 
 #[inline]
 pub fn rraise<T, E>(error: E) -> RResult<T>
-    where E: Into<Box<Error + Send + Sync>>
+    where E: Into<Box<dyn Error + Send + Sync>>
 {
 
     Err(RError::other(error))
@@ -179,7 +179,7 @@ pub fn rerror<T>(kind_: REKind) -> RResult<T> {
 
 #[inline]
 pub fn rerr<T, E>(x: E) -> RResult<T>
-    where E: Into<Box<Error + Send + Sync>>
+    where E: Into<Box<dyn Error + Send + Sync>>
 {
     Err(RError { kind: REKind::Other(x.into()) })
 }

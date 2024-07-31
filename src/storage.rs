@@ -66,14 +66,14 @@ impl SEXPbucket for Preserve {
             Err(y) => return rerror(Other(y.into())),
         };
 
-        unsafe { Ok(Rf_inherits((self.data), class.as_ptr()) == Rboolean::TRUE) }
+        unsafe { Ok(Rf_inherits(self.data, class.as_ptr()) == Rboolean::TRUE) }
     }
 
 
     fn set(&mut self, x: SEXP) {
 
         unsafe {
-            self.data = rustr_replace_object((self.data), x);
+            self.data = rustr_replace_object(self.data, x);
         }
         // calls the update method of CLASS
         // this is where to react to changes in the underlying SEXP
@@ -146,7 +146,7 @@ impl SEXPbucket for NoProtect {
             Err(y) => return rerror(Other(y.into())), // nul string error
         };
 
-        unsafe { Ok(Rf_inherits((self.data), class.as_ptr()) == Rboolean::TRUE) }
+        unsafe { Ok(Rf_inherits(self.data, class.as_ptr()) == Rboolean::TRUE) }
     }
 
 

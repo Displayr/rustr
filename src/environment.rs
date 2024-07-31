@@ -54,10 +54,10 @@ impl<T: SEXPbucket> EnvirM<T> {
                 return Ok(EnvirM { data: T::new(s.s()) });
             }
             Ok(EnvirM {
-                data: T::new(try!(rustr_eval(Rf_lang2(Rf_install(c_str("as.environment")
+                data: T::new(rustr_eval(Rf_lang2(Rf_install(c_str("as.environment")
                                                                      .as_ptr()),
                                                       s.s()),
-                                             R_GlobalEnv))),
+                                             R_GlobalEnv)?),
             })
         }
     }
@@ -138,10 +138,10 @@ impl<T: SEXPbucket> EnvirM<T> {
     pub fn new_child(&self, hashed: ::std::os::raw::c_int) -> RResult<EnvirM<T>> {
         unsafe {
             let new_env_sym = cstr_sym("new.env");
-            let sexp = try!(rustr_eval(Rf_lang3(new_env_sym,
+            let sexp = rustr_eval(Rf_lang3(new_env_sym,
                                                 Rf_ScalarLogical(hashed),
                                                 self.data.s()),
-                                       R_GlobalEnv));
+                                       R_GlobalEnv)?;
 
             Ok(EnvirM { data: T::new(sexp) })
         }

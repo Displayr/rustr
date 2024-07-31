@@ -24,7 +24,6 @@ pub mod win32;
 #[cfg(all(target_os="windows", target_pointer_width = "32"))]
 pub use self::win32::*;
 
-pub use super::complex::*;
 
 #[cfg(feature = "engine")]
 pub use self::engine::*;

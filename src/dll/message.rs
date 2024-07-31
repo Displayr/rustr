@@ -7,7 +7,7 @@ use protect::stackp::*;
 
 
 pub unsafe fn r_error_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     Rf_error(cstr.as_ptr());
     Ok(())
 }
@@ -17,7 +17,7 @@ pub unsafe fn r_error(arg1: &str) {
 }
 
 pub unsafe fn r_unimplemented_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     UNIMPLEMENTED(cstr.as_ptr());
     Ok(())
 }
@@ -27,7 +27,7 @@ pub unsafe fn r_unimplemented(arg1: &str) {
 }
 
 pub unsafe fn rf_warn_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     Rf_warning(cstr.as_ptr());
     Ok(())
 }
@@ -46,7 +46,7 @@ pub fn r_warn(arg1: &str) {
 }
 
 pub fn r_warn_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     unsafe {
         let warning = Shield::new(Rf_lang2(::Rf_install(c_str("warning").as_ptr()), cstr.uintor()));
         let _ = Rf_eval(warning.s(), R_GlobalEnv);
@@ -63,7 +63,7 @@ pub fn r_message(arg1: &str) {
 }
 
 pub fn r_message_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     unsafe {
         let warning = Shield::new(Rf_lang2(::Rf_install(c_str("message").as_ptr()), cstr.uintor()));
         let _ = Rf_eval(warning.s(), R_GlobalEnv);
@@ -73,7 +73,7 @@ pub fn r_message_user(arg1: &str) -> RResult<()> {
 
 
 pub fn r_message_box_user(arg1: &str) -> RResult<()> {
-    let cstr = try!(CString::new(arg1));
+    let cstr = CString::new(arg1)?;
     unsafe {
         R_ShowMessage(cstr.as_ptr());
         Ok(())
@@ -93,7 +93,7 @@ pub fn r_printf(x: &str) {
 }
 
 pub fn r_printf_user(x: &str) -> RResult<()> {
-    let cstr = try!(CString::new(x));
+    let cstr = CString::new(x)?;
     unsafe {
         Rprintf(cstr.as_ptr());
         Ok(())

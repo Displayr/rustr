@@ -53,7 +53,7 @@ pub fn rustr_eval(expr: SEXP, env: SEXP) -> SEXPResult {
                                                             R_GlobalEnv));
 
                 // throw eval_error(CHAR(STRING_ELT(conditionMessage, 0)));
-                let ss = try!(Vec::<String>::rnew(condition_message.s()));
+                let ss = Vec::<String>::rnew(condition_message.s())?;
                 return rerror(EvalError(ss[0].clone().into()));
 
             }
